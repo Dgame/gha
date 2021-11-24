@@ -38,6 +38,7 @@ jobs:
       - name: Validate composer.json
         run: composer validate --strict
   composer:
+    if: ${{ always() }}
     runs-on: 'ubuntu-latest'
     needs: composer-validate
     steps:
