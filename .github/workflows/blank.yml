@@ -51,7 +51,7 @@ jobs:
         php-version: ['8.0', '8.1']
         experimental: [false]
         include:
-          - composer-version: '8.2'
+          - composer-version: '7.3'
             experimental: true
     continue-on-error: ${{ matrix.experimental }}
     steps:
