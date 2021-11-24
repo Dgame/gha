@@ -1,8 +1,9 @@
 <?php
 
-enum Status
-{
-    case DRAFT;
-    case PUBLISHED;
-    case ARCHIVED;
+class User {
+    public readonly int $uid;
+
+    public function __construct(int $uid) {
+        $this->uid = $uid;
+    }
 }
