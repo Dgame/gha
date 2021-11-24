@@ -42,3 +42,25 @@ jobs:
     needs: composer-validate
     steps:
       - run: echo ${{ needs.composer-validate.result }}
+  php-lint:
+    runs-on: 'ubuntu-latest'
+    strategy:
+      fail-fast: true
+      matrix:
+        php-version: ['8.0', '8.1']
+        experimental: [false]
+        include:
+          - composer-version: '8.2'
+            experimental: true
+    continue-on-error: ${{ matrix.experimental }}
+    steps:
+      - name: PHPStan Static Analysis
+        uses: php-actions/phpstan@v3
+        with:
+          php_version: ${{ matrix.php-version }}
+  php:
+    if: ${{ always() }}
+    runs-on: 'ubuntu-latest'
+    needs: php-lint
+    steps:
+      - run: echo ${{ needs.php-lint.result }}
