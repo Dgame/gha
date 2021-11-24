@@ -41,7 +41,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     needs: composer-validate
     steps:
-      - run: echo ${{ needs.composer-validate.result }}
+      - run: exit ${{ needs.composer-validate.result != 'success' }}
   php-lint:
     runs-on: 'ubuntu-latest'
     strategy:
@@ -63,4 +63,4 @@ jobs:
     runs-on: 'ubuntu-latest'
     needs: php-lint
     steps:
-      - run: echo ${{ needs.php-lint.result }}
+      - run: exit ${{ needs.php-lint.result != 'success' }}
