@@ -61,7 +61,7 @@ jobs:
         with:
           php-version: '8.0'
           tools: phpstan
-      - run: phpstan analyse .
+      - run: phpstan analyse . --level=9
   php:
     if: ${{ always() }}
     runs-on: 'ubuntu-latest'
