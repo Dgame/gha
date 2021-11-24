@@ -1,5 +1,6 @@
 <?php
 
-class User {
-    public function __construct(public int $uid) { }
+final class User
+{
+    public function __construct(int $uid) { }
 }
