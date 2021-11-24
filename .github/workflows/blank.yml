@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        composer-version: ['v2']
+        composer-version: ['v1', 'v2']
         experimental: [false]
         include:
           - composer-version: 'latest'
