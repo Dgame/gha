@@ -61,7 +61,7 @@ jobs:
 #         with:
 #           php-version: ${{ matrix.php-version }}
 #           tools: phpstan
-      - uses: Dgame/gha/.github/workflows/matrix-php-setup.yml@v1
+      - uses: Dgame/gha-actions@v1
       - run: php --version && phpstan analyse index.php --level=9
   php:
     if: ${{ always() }}
