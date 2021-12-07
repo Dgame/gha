@@ -45,22 +45,23 @@ jobs:
         run: exit 1
   php-lint:
     runs-on: 'ubuntu-latest'
-    strategy:
-      fail-fast: true
-      matrix:
-        php-version: ['7,4', '8.0', '8.1']
-        experimental: [false]
-        include:
-          - php-version: '8.2'
-            experimental: true
-    continue-on-error: ${{ matrix.experimental }}
+#     strategy:
+#       fail-fast: true
+#       matrix:
+#         php-version: ['7,4', '8.0', '8.1']
+#         experimental: [false]
+#         include:
+#           - php-version: '8.2'
+#             experimental: true
+#     continue-on-error: ${{ matrix.experimental }}
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-version }}
-          tools: phpstan
+#       - uses: actions/checkout@v2
+#       - name: Setup PHP
+#         uses: shivammathur/setup-php@v2
+#         with:
+#           php-version: ${{ matrix.php-version }}
+#           tools: phpstan
+      - uses: Dgame/gha/.github/workflows/matrix-php-setup.yml@1
       - run: php --version && phpstan analyse index.php --level=9
   php:
     if: ${{ always() }}
