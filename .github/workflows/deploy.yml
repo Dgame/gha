@@ -9,9 +9,8 @@ jobs:
     if: ${{ github.event.label.name == 'automerge' && github.actor == 'Dgame' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: reitermarkus/automerge@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          merge-method: rebase
-          do-not-merge-labels: wip, work-in-progress
-          required-labels: automerge
+      - name: Enable auto-merge for new PRs
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_ur l}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
