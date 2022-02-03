@@ -24,7 +24,7 @@ jobs:
         experimental: [false]
         include:
           - composer-version: 'latest'
-            experimental: true
+            experimental: 'true'
     continue-on-error: ${{ matrix.experimental }}
     steps:
       - uses: actions/checkout@v2
@@ -48,7 +48,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php-version: ['7,4', '8.0', '8.1']
+        php-version: ['7.4', '8.0', '8.1']
         experimental: [false]
         include:
           - php-version: '8.2'
