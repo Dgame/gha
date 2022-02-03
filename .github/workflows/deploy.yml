@@ -9,7 +9,7 @@ jobs:
     if: ${{ github.event.label.name == 'automerge' && github.actor == 'Dgame' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: reitermarkus/automerge@v2
+      - uses: reitermarkus/automerge@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           merge-method: rebase
