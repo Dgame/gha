@@ -13,7 +13,7 @@ jobs:
         uses: peter-evans/create-or-update-comment@v1
         with:
           comment-id: ${{ github.event.comment.id }}
-          reactions: +1
+          reactions: '+1'
       - name: Enable auto-merge for new PRs
         run: gh pr merge --auto --squash "$PR_URL"
         env:
