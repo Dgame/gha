@@ -5,12 +5,19 @@ on:
     types: [ labeled ]
 
 jobs:
-  build:
-    if: ${{ github.event.label.name == 'test' && github.actor == 'Dgame' }}
+  deploy:
+    if: ${{ github.event.label.name == 'automerge' && github.actor == 'Dgame' }}
     runs-on: ubuntu-latest
     steps:
-    - name: Dump GitHub context
-      env:
-        GITHUB_CONTEXT: ${{ toJson(github) }}
-      run: |
-        echo "$GITHUB_CONTEXT"
+      - name: automerge
+        uses: "pascalgn/automerge-action@v0.14.3"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          MERGE_LABELS: "automerge,!work in progress,!wip,!test"
+          MERGE_REMOVE_LABELS: "automerge"
+          MERGE_METHOD: "squash"
+          MERGE_COMMIT_MESSAGE: "pull-request-title-and-description"
+          MERGE_FORKS: "false"
+          MERGE_RETRIES: "3"
+          MERGE_RETRY_SLEEP: "10000"
+          UPDATE_METHOD: "rebase"
