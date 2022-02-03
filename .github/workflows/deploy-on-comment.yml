@@ -1,0 +1,16 @@
+name: Deploy
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  deploy:
+    if: ${{ github.event.issue.pull_request }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: Dump GitHub context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: |
+        echo "$GITHUB_CONTEXT"
