@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    if: ${{ github.event.label.name == 'test' }}
+    if: ${{ github.event.label.name == 'test' && github.actor == "Dgame" }}
     runs-on: ubuntu-latest
     steps:
     - name: Dump GitHub context
