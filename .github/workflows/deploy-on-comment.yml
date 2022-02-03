@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy on Comment
 
 on:
   issue_comment:
@@ -6,11 +6,16 @@ on:
 
 jobs:
   deploy:
-    if: ${{ github.event.issue.pull_request }}
+    if: ${{ github.event.issue.pull_request && github.actor == 'Dgame' && github.event.comment.body == 'Deploy' }}
     runs-on: ubuntu-latest
     steps:
-    - name: Dump GitHub context
-      env:
-        GITHUB_CONTEXT: ${{ toJson(github) }}
-      run: |
-        echo "$GITHUB_CONTEXT"
+      - name: Enable auto-merge for new PRs
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#     - name: Dump GitHub context
+#       env:
+#         GITHUB_CONTEXT: ${{ toJson(github) }}
+#       run: |
+#         echo "$GITHUB_CONTEXT"
