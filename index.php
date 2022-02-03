@@ -2,5 +2,5 @@
 
 final class User
 {
-    public function __construct(public int $uid) { }
+    public function __construct(public int $nr) { }
 }
