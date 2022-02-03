@@ -24,7 +24,7 @@ jobs:
         experimental: [false]
         include:
           - composer-version: 'latest'
-            experimental: true
+            experimental: 'true'
     continue-on-error: ${{ matrix.experimental }}
     steps:
       - uses: actions/checkout@v2
