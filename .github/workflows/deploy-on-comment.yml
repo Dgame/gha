@@ -9,6 +9,11 @@ jobs:
     if: ${{ github.event.issue.pull_request && github.actor == 'Dgame' && github.event.comment.body == 'Deploy' }}
     runs-on: ubuntu-latest
     steps:
+      - name: Add reaction
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          comment-id: ${{ github.event.comment.id }}
+          reactions: +1
       - name: Enable auto-merge for new PRs
         run: gh pr merge --auto --squash "$PR_URL"
         env:
