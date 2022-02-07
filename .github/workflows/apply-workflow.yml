@@ -5,38 +5,31 @@ on:
     types: [created, edited]
 
 jobs:
-  apply:
+  validate:
     if: ${{ github.event.issue.pull_request && github.actor == 'Dgame' }}
     runs-on: ubuntu-latest
+    outputs:
+      apply: ${{ contains(steps.set-result.outputs.result, 'apply on dev') || contains(steps.set-result.outputs.result, 'apply on stage') }}
     steps:
       - uses: actions/github-script@v5
         id: set-result
         with:
           script: return context.payload.comment.body.toLowerCase()
           result-encoding: string
-      - name: Get result
-        run: echo "${{steps.set-result.outputs.result}}
-#       - uses: actions-ecosystem/action-regex-match@v2
-#         id: regex-match
-#         with:
-#           text: ${{ github.event.comment.body }}
-#           regex: 'Apply\s+on\s+(dev(?:elop)|stag(?:e|ing))'
-#           flags: 'i'
-#       - run: echo ${{ toJson(steps.regex-match.outputs) }}
-#       - name: Add reaction
-#         if: ${{ steps.regex-match.outputs.group1 != '' }}
-#         uses: peter-evans/create-or-update-comment@v1
-#         with:
-#           comment-id: ${{ github.event.comment.id }}
-#           reactions: '+1'
-#       - name: Comment Plan
-#         if: ${{ steps.regex-match.outputs.group1 != '' }}
-#         run: gh pr comment --body "Hello, @${{ github.actor }}! Applying on ${{ steps.regex-match.outputs.group1 }} was good" "$PR_URL"
-#         env:
-#           PR_URL: ${{ github.event.issue.pull_request.html_url }}
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#     - name: Dump GitHub context
-#       env:
-#         GITHUB_CONTEXT: ${{ toJson(github) }}
-#       run: |
-#         echo "$GITHUB_CONTEXT"
+  apply:
+    needs: validate
+    if: ${{ needs.validate.apply }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add reaction
+        if: ${{ steps.regex-match.outputs.group1 != '' }}
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          comment-id: ${{ github.event.comment.id }}
+          reactions: '+1'
+      - name: Comment Plan
+        if: ${{ steps.regex-match.outputs.group1 != '' }}
+        run: gh pr comment --body "Hello, @${{ github.actor }}! Applying on ${{ steps.regex-match.outputs.group1 }} was good" "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.issue.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
