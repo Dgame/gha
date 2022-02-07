@@ -2,7 +2,7 @@ name: Plan
 
 on:
   issue_comment:
-    types: [created, edited]
+    types: [created]
 
 jobs:
   plan:
@@ -17,7 +17,7 @@ jobs:
           flags: 'i'
 #       - if: ${{ steps.regex-match.outputs.match == '' }}
 #         run: exit 0
-      - run: echo ${{ steps.regex-match.outputs }}
+      - run: echo ${{ toJson(steps.regex-match.outputs) }}
       - run: echo ${{ steps.regex-match.outputs.match }}
       - run: exit 0
       - name: Add reaction
