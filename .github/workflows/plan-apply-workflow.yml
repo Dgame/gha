@@ -1,0 +1,56 @@
+name: Apply
+
+on:
+  issue_comment:
+    types: [created, edited]
+
+jobs:
+  plan-or-apply:
+    if: ${{ github.event.issue.pull_request && github.actor == 'Dgame' }}
+    runs-on: ubuntu-latest
+    outputs:
+      apply: ${{ steps.set-result.outputs.result == 'apply on dev') || steps.set-result.outputs.result == 'apply on stage' }}
+      plan: ${{ steps.set-result.outputs.result == 'plan for dev' || steps.set-result.outputs.result == 'plan for stage' }}
+      develop: ${{ endsWith(steps.set-result.outputs.result, 'dev')) }}
+      stage: ${{ endsWith(steps.set-result.outputs.result, 'stage')) }}
+    steps:
+      - uses: actions/github-script@v5
+        id: set-result
+        with:
+          script: return context.payload.comment.body.toLowerCase()
+          result-encoding: string
+
+  react:
+    needs: plan-or-apply
+    if: ${{ needs.plan-or-apply.outputs.apply || needs.plan-or-apply.outputs.plan }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add reaction
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          comment-id: ${{ github.event.comment.id }}
+          reactions: '+1'
+
+  apply:
+    needs: plan-or-apply
+    if: ${{ needs.plan-or-apply.outputs.apply }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment Apply
+        run: gh pr comment --body "Hello, @${{ github.actor }}! Applying on ${{ env.ENV_NAME }} was good" "$PR_URL"
+        env:
+          ENV_NAME: ${{ needs.plan-or-apply.outputs.develop && 'develop' || 'stage' }}
+          PR_URL: ${{ github.event.issue.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  plan:
+    needs: plan-or-apply
+    if: ${{ needs.plan-or-apply.outputs.plan }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment Plan
+        run: gh pr comment --body "Hello, @${{ github.actor }}! Plan for ${{ env.ENV_NAME }} is valid" "$PR_URL"
+        env:
+          ENV_NAME: ${{ needs.plan-or-apply.outputs.develop && 'develop' || (needs.plan-or-apply.outputs.stage && 'stage' || 'production')) }}
+          PR_URL: ${{ github.event.issue.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
