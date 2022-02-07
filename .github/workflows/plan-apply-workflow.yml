@@ -9,7 +9,7 @@ jobs:
     if: ${{ github.event.issue.pull_request && github.actor == 'Dgame' }}
     runs-on: ubuntu-latest
     outputs:
-      apply: ${{ steps.set-result.outputs.result == 'apply on dev') || steps.set-result.outputs.result == 'apply on stage' }}
+      apply: ${{ steps.set-result.outputs.result == 'apply on dev' || steps.set-result.outputs.result == 'apply on stage' }}
       plan: ${{ steps.set-result.outputs.result == 'plan for dev' || steps.set-result.outputs.result == 'plan for stage' }}
       develop: ${{ endsWith(steps.set-result.outputs.result, 'dev')) }}
       stage: ${{ endsWith(steps.set-result.outputs.result, 'stage')) }}
