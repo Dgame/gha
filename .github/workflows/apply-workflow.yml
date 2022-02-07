@@ -1,11 +1,11 @@
-name: Respond on Comment
+name: Apply
 
 on:
   issue_comment:
     types: [created, edited]
 
 jobs:
-  respond:
+  plan:
     if: ${{ github.event.issue.pull_request && github.actor == 'Dgame' }}
     runs-on: ubuntu-latest
     steps:
@@ -13,7 +13,7 @@ jobs:
         id: regex-match
         with:
           text: ${{ github.event.comment.body }}
-          regex: 'Plan\s+for\s+(dev(?:elop)|stag(?:e|ing))'
+          regex: 'Apply\s+on\s+(dev(?:elop)|stag(?:e|ing))'
           flags: 'i'
       - if: ${{ steps.regex-match.outputs.match != '' }}
         run: exit 0
@@ -23,7 +23,7 @@ jobs:
           comment-id: ${{ github.event.comment.id }}
           reactions: '+1'
       - name: Comment Plan
-        run: gh pr comment --body "Hello, @${{ github.actor }}! The plan for ${{ steps.regex-match.outputs.group1 }}" "$PR_URL"
+        run: gh pr comment --body "Hello, @${{ github.actor }}! Applying on ${{ steps.regex-match.outputs.group1 }} was good" "$PR_URL"
         env:
           PR_URL: ${{ github.event.issue.pull_request.html_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
