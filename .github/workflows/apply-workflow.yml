@@ -15,6 +15,7 @@ jobs:
           text: ${{ github.event.comment.body }}
           regex: 'Apply\s+on\s+(dev(?:elop)|stag(?:e|ing))'
           flags: 'i'
+      - run: echo ${{ toJson(steps.regex-match.outputs) }}
       - name: Add reaction
         if: ${{ steps.regex-match.outputs.group1 != '' }}
         uses: peter-evans/create-or-update-comment@v1
