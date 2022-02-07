@@ -5,22 +5,23 @@ on:
     types: [created, edited]
 
 jobs:
-  deploy:
+  respond:
     if: ${{ github.event.issue.pull_request && github.actor == 'Dgame' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Add reaction
-        uses: peter-evans/create-or-update-comment@v1
-        with:
-          comment-id: ${{ github.event.comment.id }}
-          reactions: '+1'
       - uses: actions-ecosystem/action-regex-match@v2
         id: regex-match
         with:
           text: ${{ github.event.comment.body }}
           regex: '/Plan\s+for\s+(dev(?:elop)|stag(?:e|ing))/i'
+      - if: ${{ steps.regex-match.outputs.match != '' }}
+        run: exit 0
+      - name: Add reaction
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          comment-id: ${{ github.event.comment.id }}
+          reactions: '+1'
       - name: Comment Plan
-        if: ${{ steps.regex-match.outputs.match != '' }}
         run: gh pr comment --body "Hello, @${{ github.actor }}! The plan for ${{ steps.regex-match.outputs.group1 }}" "$PR_URL"
         env:
           PR_URL: ${{ github.event.issue.pull_request.html_url }}
