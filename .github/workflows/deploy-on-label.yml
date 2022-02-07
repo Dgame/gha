@@ -2,15 +2,15 @@ name: Deploy on Label
 
 on:
   pull_request_target:
-    types: [ labeled ]
+    types: [labeled]
 
 jobs:
   deploy:
     if: ${{ github.event.label.name == 'automerge' && github.actor == 'Dgame' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Enable auto-merge for new PRs
-        run: gh pr merge --auto --squash "$PR_URL"
+      - name: Dump GitHub context
         env:
-          PR_URL: ${{ github.event.pull_request.html_url }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: |
+          echo "$GITHUB_CONTEXT"
