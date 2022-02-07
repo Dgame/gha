@@ -18,6 +18,7 @@ jobs:
 #       - if: ${{ steps.regex-match.outputs.match == '' }}
 #         run: exit 0
       - run: ${{ toJson(steps.regex-match.outputs) }}
+      - run: echo ${{ steps.regex-match.outputs.match }}
       - run: exit 0
       - name: Add reaction
         uses: peter-evans/create-or-update-comment@v1
