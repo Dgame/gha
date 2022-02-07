@@ -16,13 +16,13 @@ jobs:
           regex: 'Plan\s+for\s+(dev(?:elop)|stag(?:e|ing))'
           flags: 'i'
       - name: Add reaction
-        if: ${{ steps.regex-match.outputs.match != '' }}
+        if: ${{ steps.regex-match.outputs.group1 != '' }}
         uses: peter-evans/create-or-update-comment@v1
         with:
           comment-id: ${{ github.event.comment.id }}
           reactions: '+1'
       - name: Comment Plan
-        if: ${{ steps.regex-match.outputs.match != '' }}
+        if: ${{ steps.regex-match.outputs.group1 != '' }}
         run: gh pr comment --body "Hello, @${{ github.actor }}! The plan for ${{ steps.regex-match.outputs.group1 }}" "$PR_URL"
         env:
           PR_URL: ${{ github.event.issue.pull_request.html_url }}
