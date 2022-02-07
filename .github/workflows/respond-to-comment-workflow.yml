@@ -5,7 +5,7 @@ on:
     types: [created, edited]
 
 jobs:
-  deploy:
+  respond:
     if: ${{ github.event.issue.pull_request && github.actor == 'Dgame' }}
     runs-on: ubuntu-latest
     steps:
