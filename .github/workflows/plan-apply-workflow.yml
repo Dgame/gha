@@ -11,8 +11,8 @@ jobs:
     outputs:
       apply: ${{ steps.set-result.outputs.result == 'apply on dev' || steps.set-result.outputs.result == 'apply on stage' }}
       plan: ${{ steps.set-result.outputs.result == 'plan for dev' || steps.set-result.outputs.result == 'plan for stage' }}
-      develop: ${{ endsWith(steps.set-result.outputs.result, 'dev')) }}
-      stage: ${{ endsWith(steps.set-result.outputs.result, 'stage')) }}
+      develop: ${{ endsWith(steps.set-result.outputs.result, 'dev') }}
+      stage: ${{ endsWith(steps.set-result.outputs.result, 'stage') }}
     steps:
       - uses: actions/github-script@v5
         id: set-result
