@@ -37,7 +37,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Comment Apply
-        run: gh pr comment --body "Hello, @${{ github.actor }}! Applying on ${{ env.ENV_NAME }} was good" "$PR_URL"
+        #run: gh pr comment --body "Hello, @${{ github.actor }}! Applying on ${{ env.ENV_NAME }} was good" "$PR_URL"
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          comment-id: ${{ github.event.comment.id }}
+          reactions: '+1'
+          edit-mode: replace
+          body: |
+            Hello, @${{ github.actor }}!
+            Applying on ${{ env.ENV_NAME }} was good
         env:
           ENV_NAME: ${{ needs.plan-or-apply.outputs.develop && 'develop' || 'stage' }}
           PR_URL: ${{ github.event.issue.pull_request.html_url }}
@@ -49,7 +57,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Comment Plan
-        run: gh pr comment --body "Hello, @${{ github.actor }}! Plan for ${{ env.ENV_NAME }} is valid" "$PR_URL"
+        #run: gh pr comment --body "Hello, @${{ github.actor }}! Plan for ${{ env.ENV_NAME }} is valid" "$PR_URL"
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          comment-id: ${{ github.event.comment.id }}
+          reactions: '+1'
+          edit-mode: replace
+          body: |
+            Hello, @${{ github.actor }}!
+            Plan for ${{ env.ENV_NAME }} is valid
         env:
           ENV_NAME: ${{ needs.plan-or-apply.outputs.develop && 'develop' || (needs.plan-or-apply.outputs.stage && 'stage' || 'production') }}
           PR_URL: ${{ github.event.issue.pull_request.html_url }}
