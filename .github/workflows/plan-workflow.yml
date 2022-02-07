@@ -15,8 +15,10 @@ jobs:
           text: ${{ github.event.comment.body }}
           regex: 'Plan\s+for\s+(dev(?:elop)|stag(?:e|ing))'
           flags: 'i'
-      - if: ${{ steps.regex-match.outputs.match == '' }}
-        run: exit 0
+#       - if: ${{ steps.regex-match.outputs.match == '' }}
+#         run: exit 0
+      - run: ${{ toJson(steps.regex-match.outputs) }}
+      - run: exit 0
       - name: Add reaction
         uses: peter-evans/create-or-update-comment@v1
         with:
