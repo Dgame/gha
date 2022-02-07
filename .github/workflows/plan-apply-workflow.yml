@@ -51,6 +51,6 @@ jobs:
       - name: Comment Plan
         run: gh pr comment --body "Hello, @${{ github.actor }}! Plan for ${{ env.ENV_NAME }} is valid" "$PR_URL"
         env:
-          ENV_NAME: ${{ needs.plan-or-apply.outputs.develop && 'develop' || (needs.plan-or-apply.outputs.stage && 'stage' || 'production')) }}
+          ENV_NAME: ${{ needs.plan-or-apply.outputs.develop && 'develop' || (needs.plan-or-apply.outputs.stage && 'stage' || 'production') }}
           PR_URL: ${{ github.event.issue.pull_request.html_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
