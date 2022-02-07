@@ -22,7 +22,7 @@ jobs:
 
   react:
     needs: plan-or-apply
-    if: ${{ needs.plan-or-apply.outputs.apply || needs.plan-or-apply.outputs.plan }}
+    if: ${{ needs.plan-or-apply.outputs.apply != 'false' || needs.plan-or-apply.outputs.plan != 'false' }}
     runs-on: ubuntu-latest
     steps:
       - name: Add reaction
@@ -33,7 +33,7 @@ jobs:
 
   apply:
     needs: plan-or-apply
-    if: ${{ needs.plan-or-apply.outputs.apply }}
+    if: ${{ needs.plan-or-apply.outputs.apply != 'false' }}
     runs-on: ubuntu-latest
     steps:
       - name: Comment Apply
@@ -45,7 +45,7 @@ jobs:
 
   plan:
     needs: plan-or-apply
-    if: ${{ needs.plan-or-apply.outputs.plan }}
+    if: ${{ needs.plan-or-apply.outputs.plan != 'false' }}
     runs-on: ubuntu-latest
     steps:
       - name: Comment Plan
