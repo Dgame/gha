@@ -15,14 +15,14 @@ jobs:
           text: ${{ github.event.comment.body }}
           regex: 'Apply\s+on\s+(dev(?:elop)|stag(?:e|ing))'
           flags: 'i'
-      - if: ${{ steps.regex-match.outputs.match == '' }}
-        run: exit 0
       - name: Add reaction
+        if: ${{ steps.regex-match.outputs.match != '' }}
         uses: peter-evans/create-or-update-comment@v1
         with:
           comment-id: ${{ github.event.comment.id }}
           reactions: '+1'
       - name: Comment Plan
+        if: ${{ steps.regex-match.outputs.match != '' }}
         run: gh pr comment --body "Hello, @${{ github.actor }}! Applying on ${{ steps.regex-match.outputs.group1 }} was good" "$PR_URL"
         env:
           PR_URL: ${{ github.event.issue.pull_request.html_url }}
