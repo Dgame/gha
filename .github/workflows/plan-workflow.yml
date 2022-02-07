@@ -1,11 +1,11 @@
-name: Respond on Comment
+name: Plan
 
 on:
   issue_comment:
     types: [created, edited]
 
 jobs:
-  respond:
+  plan:
     if: ${{ github.event.issue.pull_request && github.actor == 'Dgame' }}
     runs-on: ubuntu-latest
     steps:
