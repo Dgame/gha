@@ -13,7 +13,8 @@ jobs:
         id: regex-match
         with:
           text: ${{ github.event.comment.body }}
-          regex: '/Plan\s+for\s+(dev(?:elop)|stag(?:e|ing))/i'
+          regex: 'Plan\s+for\s+(dev(?:elop)|stag(?:e|ing))'
+          flags: 'i'
       - if: ${{ steps.regex-match.outputs.match != '' }}
         run: exit 0
       - name: Add reaction
