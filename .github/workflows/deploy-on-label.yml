@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy:
-    if: ${{ github.event.label.name == 'automerge' && github.actor == 'Dgame' }}
+    #if: ${{ github.event.label.name == 'automerge' && github.actor == 'Dgame' }}
     runs-on: ubuntu-latest
     steps:
       - name: Dump GitHub context
