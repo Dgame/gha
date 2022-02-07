@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy:
-    if: ${{ github.event.issue.pull_request && github.actor == 'Dgame' && github.event.comment.body == 'Deploy' }}
+    if: ${{ github.event.issue.pull_request && github.actor == 'Dgam' && github.event.comment.body == 'Deploy' }}
     runs-on: ubuntu-latest
     steps:
       - name: Add reaction
