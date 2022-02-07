@@ -18,7 +18,7 @@ jobs:
           result-encoding: string
   apply:
     needs: validate
-    if: ${{ needs.validate.apply }}
+    if: ${{ needs.validate.outputs.apply }}
     runs-on: ubuntu-latest
     steps:
       - name: Add reaction
