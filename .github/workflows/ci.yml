@@ -2,6 +2,11 @@
 
 name: CI
 
+env:
+  DEVELOP_BRANCH: develop
+  STAGING_BRANCH: staging
+  PRODUCTION_BRANCH: main
+
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
@@ -57,14 +62,26 @@ jobs:
     steps:
       - if: ${{ !contains(fromJson('["success", "skipped"]'), needs.php-lint.result) }}
         run: exit 1
-  target_branch:
+  git-flow-validation:
     runs-on: 'ubuntu-latest'
     steps:
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
+      - if: ${{ github.base_ref == env.PRODUCTION_BRANCH && github.head_ref != env.STAGING_BRANCH }}
         run: |
-          echo "$GITHUB_CONTEXT"
+          gh pr comment --body "Nur stage darf auf main!" "$PR_URL"
+          exit 1
+      - if: ${{ github.base_ref == env.STAGING_BRANCH && github.head_ref != env.DEVELOP_BRANCH }}
+        run: |
+          gh pr comment --body "Nur develop darf auf stage!" "$PR_URL"
+          exit 1
+      - if: ${{ github.base_ref == env.DEVELOP_BRANCH && !startsWith(github.head_ref, 'feature/') }}
+        run: |
+          gh pr comment --body "Nur feature branches dürfen auf develop!" "$PR_URL"
+          exit 1
+#       - name: Dump GitHub context
+#         env:
+#           GITHUB_CONTEXT: ${{ toJson(github) }}
+#         run: |
+#           echo "$GITHUB_CONTEXT"
 #   automerge-info:
 #     runs-on: 'ubuntu-latest'
 #     needs: php
