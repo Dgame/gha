@@ -74,7 +74,7 @@ jobs:
           exit 1
       - if: ${{ github.base_ref == env.STAGING_BRANCH && github.head_ref != env.DEVELOP_BRANCH }}
         run: |
-          gh pr comment --body "Nur ${{ env.DEVELOP_BRANCH } ist gültig als Source-Branch!" "$PR_URL"
+          gh pr comment --body "Nur ${{ env.DEVELOP_BRANCH }} ist gültig als Source-Branch!" "$PR_URL"
           exit 1
       - if: ${{ github.base_ref == env.DEVELOP_BRANCH && !startsWith(github.head_ref, 'feature/') }}
         run: |
