@@ -3,7 +3,6 @@
     "type": "library",
     "description": "php time conversion",
     "keywords": [
-        "Date",
         "Time",
         "Timer",
         "Clock",
