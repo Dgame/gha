@@ -64,18 +64,21 @@ jobs:
         run: exit 1
   git-flow-validation:
     runs-on: 'ubuntu-latest'
+    env:
+      PR_URL: ${{ github.event.issue.pull_request.html_url }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - if: ${{ github.base_ref == env.PRODUCTION_BRANCH && github.head_ref != env.STAGING_BRANCH }}
         run: |
-          gh pr comment --body "Nur stage darf auf main!" "$PR_URL"
+          gh pr comment --body "Nur ${{ env.STAGING_BRANCH }} ist gültig als Source-Branch!" "$PR_URL"
           exit 1
       - if: ${{ github.base_ref == env.STAGING_BRANCH && github.head_ref != env.DEVELOP_BRANCH }}
         run: |
-          gh pr comment --body "Nur develop darf auf stage!" "$PR_URL"
+          gh pr comment --body "Nur ${{ env.DEVELOP_BRANCH } ist gültig als Source-Branch!" "$PR_URL"
           exit 1
       - if: ${{ github.base_ref == env.DEVELOP_BRANCH && !startsWith(github.head_ref, 'feature/') }}
         run: |
-          gh pr comment --body "Nur feature branches dürfen auf develop!" "$PR_URL"
+          gh pr comment --body "Nur feature branches sind gültig als Source-Branch!" "$PR_URL"
           exit 1
 #       - name: Dump GitHub context
 #         env:
