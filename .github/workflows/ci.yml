@@ -48,7 +48,7 @@ jobs:
           fetch-depth: ${{ needs.last-successful-commit.outputs.fetch_depth > 3 && needs.last-successful-commit.outputs.fetch_depth || 3 }}
       - uses: AceFire6/file_changes@v0.1.0
         with:
-          command: git diff --name-status --no-renames ${{ needs.last-successful-commit.outputs.sha }}..${{ github.sha }} {glob}
+          command: git diff --name-status --no-renames ${{ needs.last-successful-commit.outputs.sha }}..${{ github.sha }} -- {glob}
           change-map: |
             php: {"globs": "*.php"}
             docker: {"globs": "**/Dockerfile"}
