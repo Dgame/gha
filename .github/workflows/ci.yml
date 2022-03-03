@@ -15,24 +15,68 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  last-successful-commit:
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    outputs:
+      sha: ${{ steps.last_commit.outputs.sha }}
+      fetch_depth: ${{ steps.rev_list.outputs.fetch_depth }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: ${{ github.run_number }}
+      - id: last_successful_commit
+        uses: nrwl/last-successful-commit-action@v1
+        with:
+          branch: ${GITHUB_HEAD_REF}
+          workflow_id: ${{ env.WORKFLOW_NAME }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - id: last_commit
+        run: echo "::set-output name=sha::${{ steps.last_successful_commit.outputs.commit_hash || github.event.pull_request.base.sha }}"
+      - id: rev_list
+        run: echo "::set-output name=fetch_depth::$(git rev-list --count ${{ steps.last_commit.outputs.sha }}..${{ github.sha }})"
+
+  skip:
+    continue-on-error: true
+    needs: last-successful-commit
+    if: ${{ needs.last-successful-commit.result == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: ${{ needs.last-successful-commit.outputs.fetch_depth > 3 && needs.last-successful-commit.outputs.fetch_depth || 3 }}
+      - uses: AceFire6/file_changes@v0.1.0
+        with:
+          command: git diff --name-status --no-renames ${{ needs.last-successful-commit.outputs.sha }}..${{ github.sha }} {glob}
+          change-map: |
+            php: {"globs": "*.php"}
+            docker: {"globs": "**/Dockerfile"}
+            docker-compose: {"globs": "docker-compose*.yml"}
+            composer: {"globs": "composer.*"}
+            env: {"globs": ".env.*"}
+            just: {"globs": "Justfile"}
+
   docker-validate:
+    needs: skip
+    if: ${{ needs.skip.outputs.any-docker != 'true' }}
     runs-on: 'ubuntu-latest'
     steps:
       - uses: actions/checkout@v2 
       - uses: hadolint/hadolint-action@v1.6.0
         with:
           dockerfile: Dockerfile
+
   composer-validate:
+    needs: skip
+    if: ${{ needs.skip.outputs.any-composer != 'true' }}
     runs-on: 'ubuntu-latest'
     strategy:
       fail-fast: true
       matrix:
         composer-version: ['v1', 'v2']
-        experimental: [false]
         include:
           - composer-version: 'latest'
             experimental: true
-    continue-on-error: ${{ matrix.experimental }}
     steps:
       - uses: actions/checkout@v2
       - name: Setup PHP
@@ -43,17 +87,18 @@ jobs:
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Validate composer.json
         run: composer validate --strict
+
   php-lint:
+    needs: skip
+    if: ${{ needs.skip.outputs.any-php != 'true' }}
     runs-on: 'ubuntu-latest'
     strategy:
       fail-fast: true
       matrix:
         php-version: ['8.0', '8.1']
-        experimental: [false]
         include:
           - php-version: '8.2'
             experimental: true
-    continue-on-error: ${{ matrix.experimental }}
     steps:
       - uses: actions/checkout@v2
       - name: Setup PHP
@@ -62,6 +107,7 @@ jobs:
           php-version: ${{ matrix.php-version }}
           tools: phpstan
       - run: php --version && phpstan analyse index.php --level=9
+
   php:
     if: ${{ always() }}
     runs-on: 'ubuntu-latest'
@@ -69,24 +115,24 @@ jobs:
     steps:
       - if: ${{ !contains(fromJson('["success", "skipped"]'), needs.php-lint.result) }}
         run: exit 1
-  git-flow-validation:
-    runs-on: 'ubuntu-latest'
-    env:
-      PR_URL: ${{ github.event.pull_request.html_url }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    steps:
-      - if: ${{ github.base_ref == env.PRODUCTION_BRANCH && github.head_ref != env.STAGING_BRANCH }}
-        run: |
-          gh pr comment --body "Nur ${{ env.STAGING_BRANCH }} ist gültig als Source-Branch!" "$PR_URL"
-          exit 1
-      - if: ${{ github.base_ref == env.STAGING_BRANCH && github.head_ref != env.DEVELOP_BRANCH }}
-        run: |
-          gh pr comment --body "Nur ${{ env.DEVELOP_BRANCH }} ist gültig als Source-Branch!" "$PR_URL"
-          exit 1
-      - if: ${{ github.base_ref == env.DEVELOP_BRANCH && !startsWith(github.head_ref, 'feature/') }}
-        run: |
-          gh pr comment --body "Nur feature branches sind gültig als Source-Branch!" "$PR_URL"
-          exit 1
+#   git-flow-validation:
+#     runs-on: 'ubuntu-latest'
+#     env:
+#       PR_URL: ${{ github.event.pull_request.html_url }}
+#       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#     steps:
+#       - if: ${{ github.base_ref == env.PRODUCTION_BRANCH && github.head_ref != env.STAGING_BRANCH }}
+#         run: |
+#           gh pr comment --body "Nur ${{ env.STAGING_BRANCH }} ist gültig als Source-Branch!" "$PR_URL"
+#           exit 1
+#       - if: ${{ github.base_ref == env.STAGING_BRANCH && github.head_ref != env.DEVELOP_BRANCH }}
+#         run: |
+#           gh pr comment --body "Nur ${{ env.DEVELOP_BRANCH }} ist gültig als Source-Branch!" "$PR_URL"
+#           exit 1
+#       - if: ${{ github.base_ref == env.DEVELOP_BRANCH && !startsWith(github.head_ref, 'feature/') }}
+#         run: |
+#           gh pr comment --body "Nur feature branches sind gültig als Source-Branch!" "$PR_URL"
+#           exit 1
 #       - name: Dump GitHub context
 #         env:
 #           GITHUB_CONTEXT: ${{ toJson(github) }}
