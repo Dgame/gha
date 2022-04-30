@@ -1,0 +1,14 @@
+name: Create
+
+concurrency: ${{ github.ref }}
+
+on:
+  create:
+    branches:
+      - feature/**
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Hello"
