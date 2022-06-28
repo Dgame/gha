@@ -1,14 +1,21 @@
 name: Deploy
 
 on:
-  release:
-    types:
-      - released
-    branches:
-      - main
+  workflow_call:
+    inputs:
+      username:
+        required: true
+        type: string
+      environment:
+        required: true
+        type: string
+    secrets:
+      TEST:
+        required: true
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
     steps:
-      - run: echo "RELEASE"
+      - run: echo "${{ inputs.username }}:${{ secrets.TEST }}:${{ inputs.environment }}"
