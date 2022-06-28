@@ -6,6 +6,11 @@ on:
       environment:
         required: true
         type: string
+    secrets:
+      TEST:
+        required: true
+      USERNAME:
+        required: true
 
 jobs:
   aws:
