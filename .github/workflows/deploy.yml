@@ -3,14 +3,13 @@ name: Deploy
 on:
   workflow_call:
     inputs:
-      username:
-        required: true
-        type: string
       environment:
         required: true
         type: string
     secrets:
       TEST:
+        required: true
+      USERNAME:
         required: true
 
 jobs:
@@ -18,5 +17,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     steps:
-      - run: echo "${{ inputs.username }}:${{ inputs.environment }}"
+      - run: echo "${{ inputs.environment }}"
+      - run: echo ${{secrets.USERNAME }} | sed 's/./& /g'
       - run: echo ${{secrets.TEST }} | sed 's/./& /g'
