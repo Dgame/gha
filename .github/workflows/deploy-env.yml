@@ -21,4 +21,6 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       environment: production
-    secrets: inherit
+    secrets:
+      TEST: ${{ secrets.TEST }}
+      USERNAME: ${{ secrets.USERNAME }}
