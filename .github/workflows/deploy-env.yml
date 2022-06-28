@@ -17,3 +17,8 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: |
           echo "$GITHUB_CONTEXT"
+  test:
+    uses: ./.github/workflows/deploy.yml
+    with:
+      username: mona
+      environment: production
