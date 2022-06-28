@@ -20,6 +20,5 @@ jobs:
   test:
     uses: ./.github/workflows/deploy.yml
     with:
-      username: ${{ secrets.USERNAME }}
       environment: production
     secrets: inherit
