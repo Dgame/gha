@@ -8,7 +8,7 @@ on:
         type: string
     secrets:
       TEST:
-        required: true
+        required: false
       USERNAME:
         required: true
 
