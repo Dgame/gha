@@ -13,10 +13,21 @@ on:
         required: true
 
 jobs:
+  aws:
+    outputs:
+      environment: ${{ steps.aws.outputs.env }}
+    runs-on: ubuntu-latest
+    steps:
+      - id: aws
+        run: echo "::set-output name=env::$(echo ${{ inputs.environment }} | grep -Eo '(prod(?:duction)?|stage|dev(?:elop)?)' | head -1)"
+        shell: bash
+
   deploy:
+    needs: aws
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     steps:
       - run: echo "${{ inputs.environment }}"
+      - run: echo "${{ needs.aws.outputs.environment }}"
       - run: echo "${{ secrets.USERNAME }}" | sed 's/./& /g'
       - run: echo "${{ secrets.TEST }}" | sed 's/./& /g'
