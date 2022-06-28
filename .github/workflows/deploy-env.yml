@@ -22,3 +22,4 @@ jobs:
     with:
       username: mona
       environment: production
+    secrets: inherit
