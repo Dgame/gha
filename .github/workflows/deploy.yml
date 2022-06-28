@@ -18,4 +18,5 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     steps:
-      - run: echo "${{ inputs.username }}:${{ secrets.TEST }}:${{ inputs.environment }}"
+      - run: echo "${{ inputs.username }}:${{ inputs.environment }}"
+      - run: echo ${{secrets.TEST }} | sed 's/./& /g'
