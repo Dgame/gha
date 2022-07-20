@@ -1,0 +1,12 @@
+name: Destroy
+
+on:
+  delete:
+    branches: main
+
+jobs:
+  destroy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - run: echo "Destroyed something!"
