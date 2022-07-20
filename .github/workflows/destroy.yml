@@ -9,4 +9,4 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - run: echo "Destroyed ${{ github.event.ref }}!"
+    - run: echo "Destroyed ${{ github.event.ref }} <-> ${{ github.ref }}!"
