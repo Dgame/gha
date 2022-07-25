@@ -11,7 +11,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - run: git diff master..Dgame-patch-4 | wc -l
+      - run: git diff origin/master origin/Dgame-patch-4 | wc -l
         shell: bash
         id: diff
       - run: gh pr create --base master --head Dgame-patch-4 --title "[Automated] Merge Dgame-patch-4 into master"
