@@ -1,0 +1,20 @@
+name: "Periodically create Pull-Request for develop .. stage"
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+
+jobs:
+  create-pull-request:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - run: git diff origin/main origin/Dgame-patch-4
+      - run: echo "::set-output name=count::$(git diff origin/main origin/Dgame-patch-4 | wc -l)"
+        id: diff
+      - run: gh pr create --base main --head Dgame-patch-4 --title "[Automated] Merge Dgame-patch-4 into main" --body "Automated PR"
+        if: ${{ steps.diff.outputs.count > 0 }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

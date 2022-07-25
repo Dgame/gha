@@ -1,14 +1,33 @@
 name: Deploy
 
 on:
-  release:
-    types:
-      - released
-    branches:
-      - main
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+    secrets:
+      TEST:
+        required: true
+      USERNAME:
+        required: true
 
 jobs:
-  deploy:
+  aws:
+    outputs:
+      environment: ${{ steps.aws.outputs.env }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo "RELEASE"
+      - id: aws
+        run: echo "::set-output name=env::$(echo ${{ inputs.environment }} | grep -Eo '(prod(?:duction)?|stage|dev(?:elop)?)' | head -1)"
+        shell: bash
+
+  deploy:
+    needs: aws
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - run: echo "${{ inputs.environment }}"
+      - run: echo "${{ needs.aws.outputs.environment }}"
+      - run: echo "${{ secrets.USERNAME }}" | sed 's/./& /g'
+      - run: echo "${{ secrets.TEST }}" | sed 's/./& /g'

@@ -17,3 +17,10 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: |
           echo "$GITHUB_CONTEXT"
+  test:
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment: production
+    secrets:
+      TEST: ${{ secrets.TEST }}
+      USERNAME: ${{ secrets.USERNAME }}
