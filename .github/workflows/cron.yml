@@ -2,7 +2,7 @@ name: "Periodically create Pull-Request for develop .. stage"
 
 on:
   schedule:
-    - cron: '*'
+    - cron: '5 * * * *'
 
 jobs:
   create-pull-request:
