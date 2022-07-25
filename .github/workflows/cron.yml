@@ -1,0 +1,21 @@
+name: "Periodically create Pull-Request for develop .. stage"
+
+on:
+  schedule:
+    - cron: '*'
+
+jobs:
+  create-pull-request:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - run: git diff master..Dgame-patch-4 | wc -l
+        shell: bash
+        id: diff
+      - run: gh pr create --base master --head Dgame-patch-4 --title "[Automated] Merge Dgame-patch-4 into master"
+        shell: bash
+        if: ${{ steps.diff.outputs.stdout > 0 }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
