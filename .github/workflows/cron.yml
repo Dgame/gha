@@ -13,7 +13,7 @@ jobs:
           fetch-depth: 0
       - run: echo "::set-output name=count::$(git diff origin/main origin/Dgame-patch-4 | wc -l)"
         id: diff
-      - run: gh pr create --base main --head Dgame-patch-4 --title "[Automated] Merge Dgame-patch-4 into main"
+      - run: gh pr create --base main --head Dgame-patch-4 --title "[Automated] Merge Dgame-patch-4 into main" --fill
         if: ${{ steps.diff.outputs.count > 0 }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
