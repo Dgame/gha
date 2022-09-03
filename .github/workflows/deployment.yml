@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  deploy-develop:
+    runs-on: ubuntu-latest
+    environment: develop
+    steps:
+      - run: echo "develop deployment"
+ 
+  deploy-stage:
+    runs-on: ubuntu-latest
+    environment: stage
+    steps:
+      - run: echo "stage deployment"
+
+  deploy-production:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - run: echo "production deployment"
