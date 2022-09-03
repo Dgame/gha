@@ -13,12 +13,14 @@ jobs:
       - run: echo "develop deployment"
  
   deploy-stage:
+    needs: deploy-develop
     runs-on: ubuntu-latest
     environment: stage
     steps:
       - run: echo "stage deployment"
 
   deploy-production:
+    needs: deploy-stage
     runs-on: ubuntu-latest
     environment: production
     steps:
