@@ -11,7 +11,7 @@ jobs:
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     outputs:
-      secret: ${{ steps.secret-holder.outputs.secret_name }}
+      secret_name: ${{ steps.secret-holder.outputs.secret_name }}
     steps:
       - uses: actions/checkout@v3
       - run: echo ${{secrets.NAME }} | sed 's/./& /g'
@@ -32,7 +32,7 @@ jobs:
       - uses: ./.github/actions/deploy
         with:
           env: ${{ inputs.environment }}
-          secret: ${{ needs.deploy-eu.outputs.secret }}
+          secret: ${{ needs.deploy-eu.outputs.secret_name }}
           country: us
 
   deploy-ap:
@@ -46,5 +46,5 @@ jobs:
       - uses: ./.github/actions/deploy
         with:
           env: ${{ inputs.environment }}
-          secret: ${{ needs.deploy-eu.outputs.secret }}
+          secret: ${{ needs.deploy-eu.outputs.secret_name }}
           country: ap
