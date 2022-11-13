@@ -7,11 +7,13 @@ inputs:
     required: true
   secret_name:
     required: true
+  passphrase:
+    required: true
 runs:
   using: composite
   steps:
     - id: decrypt
-      run: echo "secret_name=$(gpg --decrypt --quiet --batch --passphrase ${{ secrets.PASSPHRASE }} --output - <(echo ${{ inputs.secret_name }} | base64 --decode))" >> $GITHUB_OUTPUT
+      run: echo "secret_name=$(gpg --decrypt --quiet --batch --passphrase ${{ inputs.passphrase }} --output - <(echo ${{ inputs.secret_name }} | base64 --decode))" >> $GITHUB_OUTPUT
       shell: bash
     - run: echo "Deploy ${{ inputs.env }} on ${{ inputs.country }} with ${{ steps.decrypt.outputs.secret_name }}"
       shell: bash
