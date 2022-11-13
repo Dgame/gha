@@ -8,5 +8,4 @@ inputs:
 runs:
   using: composite
   steps:
-    steps:
-      - run: echo "Deploy ${{ matrix.env }} on ${{ matrix.country }}"
+    - run: echo "Deploy ${{ matrix.env }} on ${{ matrix.country }}"
