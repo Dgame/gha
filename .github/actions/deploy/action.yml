@@ -1,0 +1,12 @@
+name: Deploy
+description: "Deploys"
+inputs:
+  env:
+    required: true
+  country:
+    required: true
+runs:
+  using: composite
+  steps:
+    steps:
+      - run: echo "Deploy ${{ matrix.env }} on ${{ matrix.country }}"
