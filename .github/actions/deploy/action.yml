@@ -5,8 +5,10 @@ inputs:
     required: true
   country:
     required: true
+  secret_name:
+    required: true
 runs:
   using: composite
   steps:
-    - run: echo "Deploy ${{ matrix.env }} on ${{ matrix.country }} with ${{ secrets.NAME }}"
+    - run: echo "Deploy ${{ inputs.env }} on ${{ inputs.country }} with ${{ inputs.secret_name }}"
       shell: bash
