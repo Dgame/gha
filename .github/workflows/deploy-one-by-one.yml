@@ -11,29 +11,42 @@ jobs:
     runs-on: ubuntu-latest
     environment: develop
     strategy:
+      max-parallel: 1
+      fail-fast: true
       matrix:
         country: [a, b, c]
     steps:
-      - run: echo "Deploy develop on ${{ matrix.country }}"
+      - uses: ./.github/actions/deploy
+        with:
+          env: develop
+          country: ${{ matrix.country }}
 
   deploy-stage:
-    needs: deploy-dev
-    name: Deploy stage
+    name: Deploy Stage
     runs-on: ubuntu-latest
     environment: stage
     strategy:
+      max-parallel: 1
+      fail-fast: true
       matrix:
         country: [a, b, c]
     steps:
-      - run: echo "Deploy stage on ${{ matrix.country }}"
+      - uses: ./.github/actions/deploy
+        with:
+          env: stage
+          country: ${{ matrix.country }}
 
   deploy-prod:
-    needs: deploy-stage
-    name: Deploy production
+    name: Deploy Production
     runs-on: ubuntu-latest
     environment: production
     strategy:
+      max-parallel: 1
+      fail-fast: true
       matrix:
         country: [a, b, c]
     steps:
-      - run: echo "Deploy production on ${{ matrix.country }}"
+      - uses: ./.github/actions/deploy
+        with:
+          env: production
+          country: ${{ matrix.country }}
