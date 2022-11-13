@@ -16,6 +16,7 @@ jobs:
       matrix:
         country: [a, b, c]
     steps:
+      - uses: actions/checkout@v3
       - uses: ./.github/actions/deploy
         with:
           env: develop
@@ -31,6 +32,7 @@ jobs:
       matrix:
         country: [a, b, c]
     steps:
+      - uses: actions/checkout@v3
       - uses: ./.github/actions/deploy
         with:
           env: stage
@@ -46,6 +48,7 @@ jobs:
       matrix:
         country: [a, b, c]
     steps:
+      - uses: actions/checkout@v3
       - uses: ./.github/actions/deploy
         with:
           env: production
