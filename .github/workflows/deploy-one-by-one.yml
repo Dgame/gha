@@ -8,20 +8,20 @@ on:
 jobs:
   deploy-dev:
     name: "Deploy on Develop"
-    uses: ./.github/workflows/deploy1by1.yml
+    uses: ./.github/workflows/deploy-1by1.yml
     with:
       environment: develop
 
   deploy-stage:
     needs: deploy-dev
     name: "Deploy on Stage"
-    uses: ./.github/workflows/deploy1by1.yml
+    uses: ./.github/workflows/deploy-1by1.yml
     with:
       environment: stage
 
   deploy-prod:
     needs: deploy-stage
     name: "Deploy on Production"
-    uses: ./.github/workflows/deploy1by1.yml
+    uses: ./.github/workflows/deploy-1by1.yml
     with:
       environment: production
