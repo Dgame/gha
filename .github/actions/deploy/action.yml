@@ -8,5 +8,5 @@ inputs:
 runs:
   using: composite
   steps:
-    - run: echo "Deploy ${{ matrix.env }} on ${{ matrix.country }}"
+    - run: echo "Deploy ${{ matrix.env }} on ${{ matrix.country }} with ${{ secrets.NAME }}"
       shell: bash
