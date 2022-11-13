@@ -1,0 +1,19 @@
+name: Deployment one by one
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  strategy:
+    matrix:
+      env: [develop, stage, production]
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ matrix.env }}
+    strategy:
+      matrix:
+        country: [a, b, c]
+    steps:
+      - run: Deploy ${{ matrix.env }} on ${{ matrix.country }}
