@@ -10,42 +10,57 @@ jobs:
     name: Deploy develop
     runs-on: ubuntu-latest
     environment: develop
-    strategy:
-      matrix:
-        country: [a, b, c]
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/deploy
         with:
           env: develop
-          country: ${{ matrix.country }}
+          country: eu
+      - uses: ./.github/actions/deploy
+        with:
+          env: develop
+          country: us
+      - uses: ./.github/actions/deploy
+        with:
+          env: develop
+          country: ap
 
   deploy-stage:
     needs: deploy-dev
     name: Deploy Stage
     runs-on: ubuntu-latest
     environment: stage
-    strategy:
-      matrix:
-        country: [a, b, c]
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/deploy
         with:
           env: stage
-          country: ${{ matrix.country }}
+          country: eu
+      - uses: ./.github/actions/deploy
+        with:
+          env: stage
+          country: us
+      - uses: ./.github/actions/deploy
+        with:
+          env: stage
+          country: ap
 
   deploy-prod:
     needs: deploy-stage
     name: Deploy Production
     runs-on: ubuntu-latest
     environment: production
-    strategy:
-      matrix:
-        country: [a, b, c]
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/deploy
         with:
           env: production
-          country: ${{ matrix.country }}
+          country: eu
+      - uses: ./.github/actions/deploy
+        with:
+          env: production
+          country: us
+      - uses: ./.github/actions/deploy
+        with:
+          env: production
+          country: ap
