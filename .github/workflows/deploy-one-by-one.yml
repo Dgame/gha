@@ -6,14 +6,34 @@ on:
       - main
 
 jobs:
-  strategy:
-    matrix:
-      env: [develop, stage, production]
-  deploy:
+  deploy-dev:
+    name: Deploy develop
     runs-on: ubuntu-latest
-    environment: ${{ matrix.env }}
+    environment: develop
     strategy:
       matrix:
         country: [a, b, c]
     steps:
-      - run: Deploy ${{ matrix.env }} on ${{ matrix.country }}
+      - run: echo "Deploy develop on ${{ matrix.country }}"
+
+  deploy-stage:
+    needs: deploy-dev
+    name: Deploy stage
+    runs-on: ubuntu-latest
+    environment: stage
+    strategy:
+      matrix:
+        country: [a, b, c]
+    steps:
+      - run: echo "Deploy stage on ${{ matrix.country }}"
+
+  deploy-prod:
+    needs: deploy-stage
+    name: Deploy production
+    runs-on: ubuntu-latest
+    environment: production
+    strategy:
+      matrix:
+        country: [a, b, c]
+    steps:
+      - run: echo "Deploy production on ${{ matrix.country }}"
