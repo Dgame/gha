@@ -7,69 +7,21 @@ on:
 
 jobs:
   deploy-dev:
-    name: Deploy develop
-    runs-on: ubuntu-latest
-    environment: develop
-    steps:
-      - uses: actions/checkout@v3
-      - name: "in eu"
-        uses: ./.github/actions/deploy
-        with:
-          env: develop
-          country: eu
-      - name: "in us"
-        uses: ./.github/actions/deploy
-        with:
-          env: develop
-          country: us
-      - name: "in ap"
-        uses: ./.github/actions/deploy
-        with:
-          env: develop
-          country: ap
+    name: "Deploy on Develop"
+    uses: ./.github/workflows/deploy1by1.yml
+    with:
+      environment: develop
 
   deploy-stage:
     needs: deploy-dev
-    name: Deploy Stage
-    runs-on: ubuntu-latest
-    environment: stage
-    steps:
-      - uses: actions/checkout@v3
-      - name: "in eu"
-        uses: ./.github/actions/deploy
-        with:
-          env: stage
-          country: eu
-      - name: "in us"
-        uses: ./.github/actions/deploy
-        with:
-          env: stage
-          country: us
-      - name: "in ap"
-        uses: ./.github/actions/deploy
-        with:
-          env: stage
-          country: ap
+    name: "Deploy on Stage"
+    uses: ./.github/workflows/deploy1by1.yml
+    with:
+      environment: stage
 
   deploy-prod:
     needs: deploy-stage
-    name: Deploy Production
-    runs-on: ubuntu-latest
-    environment: production
-    steps:
-      - uses: actions/checkout@v3
-      - name: "in eu"
-        uses: ./.github/actions/deploy
-        with:
-          env: production
-          country: eu
-      - name: "in us"
-        uses: ./.github/actions/deploy
-        with:
-          env: production
-          country: us
-      - name: "in ap"
-        uses: ./.github/actions/deploy
-        with:
-          env: production
-          country: ap
+    name: "Deploy on Production"
+    uses: ./.github/workflows/deploy1by1.yml
+    with:
+      environment: production
