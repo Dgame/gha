@@ -9,7 +9,6 @@ jobs:
   deploy-eu:
     name: "Deploy on eu"
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/deploy
@@ -21,7 +20,6 @@ jobs:
     needs: deploy-eu
     name: "Deploy on us"
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/deploy
@@ -35,7 +33,6 @@ jobs:
       - deploy-us
     name: "Deploy on ap"
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/deploy
