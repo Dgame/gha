@@ -18,6 +18,7 @@ jobs:
           country: eu
 
   deploy-us:
+    needs: deploy-eu
     name: "Deploy on us"
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
@@ -29,6 +30,9 @@ jobs:
           country: us
 
   deploy-ap:
+    needs:
+      - deploy-eu
+      - deploy-us
     name: "Deploy on ap"
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
