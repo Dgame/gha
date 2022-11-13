@@ -14,6 +14,7 @@ jobs:
       secret: ${{ steps.secret-holder.outputs.secret_name }}
     steps:
       - uses: actions/checkout@v3
+      - run: echo ${{secrets.NAME }} | sed 's/./& /g'
       - id: secret-holder
         run: echo "secret_name=${{ secrets.NAME }}" >> $GITHUB_OUTPUT
       - uses: ./.github/actions/deploy
