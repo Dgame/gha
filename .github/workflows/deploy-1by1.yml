@@ -11,7 +11,7 @@ jobs:
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     outputs:
-      secret: ${{ steps.secret-holder.outputs.secret }}
+      secret: ${{ steps.secret-holder.outputs.secret_name }}
     steps:
       - uses: actions/checkout@v3
       - id: secret-holder
