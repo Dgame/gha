@@ -10,8 +10,12 @@ jobs:
     name: "Deploy on eu"
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
+    outputs:
+      secret: ${{ steps.secret-holder.outputs.secret }}
     steps:
       - uses: actions/checkout@v3
+      - id: secret-holder
+        run: echo "secret_name=${{ secrets.NAME }}" >> $GITHUB_OUTPUT
       - uses: ./.github/actions/deploy
         with:
           env: ${{ inputs.environment }}
@@ -26,6 +30,7 @@ jobs:
       - uses: ./.github/actions/deploy
         with:
           env: ${{ inputs.environment }}
+          secret: ${{ needs.deploy-eu.outputs.secret }}
           country: us
 
   deploy-ap:
@@ -39,4 +44,5 @@ jobs:
       - uses: ./.github/actions/deploy
         with:
           env: ${{ inputs.environment }}
+          secret: ${{ needs.deploy-eu.outputs.secret }}
           country: ap
