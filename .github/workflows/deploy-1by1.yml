@@ -19,6 +19,7 @@ jobs:
         with:
           env: ${{ inputs.environment }}
           secret_name: ${{ secrets.NAME }}
+          passphrase: ${{ secrets.PASSPHRASE }}
           country: eu
 
   deploy-us:
@@ -31,6 +32,7 @@ jobs:
         with:
           env: ${{ inputs.environment }}
           secret_name: ${{ needs.deploy-eu.outputs.secret_name }}
+          passphrase: ${{ secrets.PASSPHRASE }}
           country: us
 
   deploy-ap:
@@ -45,4 +47,5 @@ jobs:
         with:
           env: ${{ inputs.environment }}
           secret_name: ${{ needs.deploy-eu.outputs.secret_name }}
+          passphrase: ${{ secrets.PASSPHRASE }}
           country: ap
