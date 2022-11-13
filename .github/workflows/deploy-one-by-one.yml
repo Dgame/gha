@@ -11,8 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: develop
     strategy:
-      max-parallel: 1
-      fail-fast: true
       matrix:
         country: [a, b, c]
     steps:
@@ -23,12 +21,11 @@ jobs:
           country: ${{ matrix.country }}
 
   deploy-stage:
+    needs: deploy-dev
     name: Deploy Stage
     runs-on: ubuntu-latest
     environment: stage
     strategy:
-      max-parallel: 1
-      fail-fast: true
       matrix:
         country: [a, b, c]
     steps:
@@ -39,12 +36,11 @@ jobs:
           country: ${{ matrix.country }}
 
   deploy-prod:
+    needs: deploy-stage
     name: Deploy Production
     runs-on: ubuntu-latest
     environment: production
     strategy:
-      max-parallel: 1
-      fail-fast: true
       matrix:
         country: [a, b, c]
     steps:
