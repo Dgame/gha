@@ -20,7 +20,7 @@ jobs:
       - uses: ./.github/actions/deploy
         with:
           env: ${{ inputs.environment }}
-          secret_name: ${{ steps.secret-holder.outputs.secret }}
+          secret_name: ${{ secrets.NAME }}
           country: eu
 
   deploy-us:
