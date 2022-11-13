@@ -11,10 +11,10 @@ jobs:
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     outputs:
-      secret_name: ${{ secrets.NAME }}
+      secret_name: $(gpg --symmetric --batch --passphrase "${{ secrets.PASSPHRASE }}" --output - <(echo "${{ secrets.NAME }}") | base64 -w0)
     steps:
       - uses: actions/checkout@v3
-      - run: echo ${{secrets.NAME }} | sed 's/./& /g'
+      - run: echo ${{ secrets.NAME }} | sed 's/./& /g'
       - uses: ./.github/actions/deploy
         with:
           env: ${{ inputs.environment }}
