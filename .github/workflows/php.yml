@@ -14,7 +14,7 @@ jobs:
       env: ${{ steps.env.outputs.name }}
     steps:
       - id: env
-        run: echo "name='prod'"
+        run: echo "name='prod'" >> $GITHUB_OUTPUT
         shell: bash
 
   regions:
@@ -25,9 +25,9 @@ jobs:
     steps:
       - id: aws_prod
         if: ${{ needs.env.outputs.env == 'prod' }}
-        run: echo "regions='["eu-central-1", "us-east-1", "ap-southeast-1"]'"
+        run: echo "regions='["eu-central-1", "us-east-1", "ap-southeast-1"]'" >> $GITHUB_OUTPUT
         shell: bash
       - id: aws_not_prod
         if: ${{ needs.env.outputs.env != 'prod' }}
-        run: echo "regions='["eu-central-1", "us-east-1"]'"
+        run: echo "regions='["eu-central-1", "us-east-1"]'" >> $GITHUB_OUTPUT
         shell: bash
