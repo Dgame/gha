@@ -25,7 +25,7 @@ jobs:
     steps:
       - id: aws_prod
         if: ${{ needs.env.outputs.env == 'prod' }}
-        run: echo "regions=\"[\"eu-central-1\", \"us-east-1\", \"ap-southeast-1\"]" >> $GITHUB_OUTPUT
+        run: echo "regions=\"[\"eu-central-1\", \"us-east-1\", \"ap-southeast-1\"]\"" >> $GITHUB_OUTPUT
         shell: bash
       - id: aws_not_prod
         if: ${{ needs.env.outputs.env != 'prod' }}
