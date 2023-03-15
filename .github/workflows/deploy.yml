@@ -13,6 +13,20 @@ on:
         required: true
 
 jobs:
+  regions:
+    runs-on: ubuntu-latest
+    outputs:
+      regions: ${{ inputs.environment == 'production' && steps.aws_prod.outputs.regions || steps.aws_not_prod.outputs.regions }}
+    steps:
+      - id: aws_prod
+        if: ${{ inputs.environment == 'production' }}
+        run: echo "regions='["eu-central-1", "us-east-1", "ap-southeast-1"]'"
+        shell: bash
+      - id: aws_not_prod
+        if: ${{ inputs.environment != 'production' }}
+        run: echo "regions='["eu-central-1", "us-east-1"]'"
+        shell: bash
+
   aws:
     outputs:
       environment: ${{ steps.aws.outputs.env }}
