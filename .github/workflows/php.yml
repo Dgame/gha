@@ -1,0 +1,33 @@
+name: PHP Composer
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  env:
+    runs-on: ubuntu-latest
+    outputs:
+      env: ${{ steps.env.outputs.name }}
+    steps:
+      - id: env
+        run: echo "name='prod'"
+        shell: bash
+
+  regions:
+    needs: env
+    runs-on: ubuntu-latest
+    outputs:
+      regions: ${{ needs.env.outputs.env == 'prod' && steps.aws_prod.outputs.regions || steps.aws_not_prod.outputs.regions }}
+    steps:
+      - id: aws_prod
+        if: ${{ needs.env.outputs.env == 'prod' }}
+        run: echo "regions='["eu-central-1", "us-east-1", "ap-southeast-1"]'"
+        shell: bash
+      - id: aws_not_prod
+        if: ${{ needs.env.outputs.env != 'prod' }}
+        run: echo "regions='["eu-central-1", "us-east-1"]'"
+        shell: bash
