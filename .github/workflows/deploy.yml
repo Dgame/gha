@@ -37,7 +37,7 @@ jobs:
         shell: bash
 
   deploy:
-    needs: aws
+    needs: [ aws, regions ]
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     steps:
