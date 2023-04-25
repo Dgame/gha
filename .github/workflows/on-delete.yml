@@ -23,11 +23,13 @@ jobs:
         shell: bash
 
       - name: Run if there were deletions
-        run: test -s deleted_md_files.txt && echo "Deleted Markdown files: $(cat deleted_md_files.txt)" || echo "No deletions"
+        run: "test -s deleted_md_files.txt && echo \"Deleted Markdown files: $(cat deleted_md_files.txt)\" || echo \"No deletions\""
+        shell: bash
         id: deletions
 
       - name: Run if there were changes
-        run: test -s changed_md_files.txt && echo "Changed Markdown files: $(cat changed_md_files.txt)" || echo "No changes"
+        run: "test -s changed_md_files.txt && echo \"Changed Markdown files: $(cat changed_md_files.txt)\" || echo \"No changes\""
+        shell: bash
         id: changes
 
       - name: Build and test
