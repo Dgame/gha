@@ -1,7 +1,8 @@
 name: On Delete
 
 on:
-  pull_request
+  pull_request:
+    types: [opened, reopened]
 
 jobs:
   build:
@@ -22,13 +23,21 @@ jobs:
         shell: bash
 
       - name: Run if there were deletions
-        if: ${{ fileExists('deleted_md_files.txt') && !isEmpty(github.event.client_payload.deleted_md_files) }}
-        run: |
-          # Add steps to run your build/test commands here
-          echo "Deleted Markdown files: ${{ join(github.event.client_payload.deleted_md_files, ', ') }}"
+        run: test -s deleted_md_files.txt && echo "Deleted Markdown files: $(cat deleted_md_files.txt)" || echo "No deletions"
+        id: deletions
 
       - name: Run if there were changes
-        if: ${{ fileExists('changed_md_files.txt') && !isEmpty(github.event.client_payload.changed_md_files) }}
+        run: test -s changed_md_files.txt && echo "Changed Markdown files: $(cat changed_md_files.txt)" || echo "No changes"
+        id: changes
+
+      - name: Build and test
+        if: ${{ steps.deletions.outcome == 'success' }}
         run: |
           # Add steps to run your build/test commands here
-          echo "Changed Markdown files: ${{ join(github.event.client_payload.changed_md_files, ', ') }}"
+          echo "Build and test after deletion of Markdown files"
+
+      - name: Run other action
+        if: ${{ steps.changes.outcome == 'success' }}
+        run: |
+          # Add steps to run your other action here
+          echo "Other action after change of Markdown files"
