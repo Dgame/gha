@@ -1,11 +1,11 @@
-name: "On Delete"
+name: On Delete
 
 on:
   pull_request:
     types: [opened, reopened]
 
 jobs:
-  build:
+  on-delete:
     runs-on: ubuntu-latest
 
     steps:
