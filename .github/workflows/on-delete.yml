@@ -1,0 +1,13 @@
+name: DELETE
+
+on:
+  delete:
+    paths:
+      - '**.md'
+
+jobs:
+  job_name:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Step 1
+        run: echo "This step will run when a Markdown file is deleted"
