@@ -1,0 +1,14 @@
+name: Docker Image CI
+
+on:
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - '**.php'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - run: echo Pushed PHP!
