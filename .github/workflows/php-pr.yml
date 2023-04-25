@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: PHP
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ on:
       - '**.php'
 
 jobs:
-  build:
+  php:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
