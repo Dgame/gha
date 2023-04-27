@@ -20,7 +20,7 @@ on:
 jobs:
   greet:
     runs-on: ubuntu-latest
-
+    environment: ${{ inputs.environment }}
     steps:
     - name: Send greeting
       run: echo "${{ github.event.inputs.message }} ${{ vars.NAME }} ${{ fromJSON('["", "🥳"]')[github.event.inputs.use-emoji == 'true'] }} ${{ github.event.inputs.name }}"
