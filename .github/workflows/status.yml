@@ -1,0 +1,11 @@
+on:
+  status
+jobs:
+  status-check:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - if: ${{ github.event.state == 'error' ||github.event.state == 'failure' }}
+        run: exit 1
+      - if: ${{ github.event.state == 'success' }}
+        run: exit 0
