@@ -1,0 +1,11 @@
+name: Check all Status Checks
+
+on:
+  check_suite:
+    types: [completed]
+
+jobs:
+  check_status_checks:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{ toJSON(github) }}
