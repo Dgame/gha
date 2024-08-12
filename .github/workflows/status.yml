@@ -3,7 +3,7 @@ on:
 jobs:
   status-check:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    #if: github.event_name == 'pull_request'
     steps:
       - if: ${{ github.event.state == 'error' ||github.event.state == 'failure' }}
         run: exit 1
