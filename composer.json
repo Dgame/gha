@@ -44,7 +44,7 @@
         },
         "preferred-install": "dist",
         "process-timeout": 0,
-        "sort-packages": 0
+        "sort-packages": 1
     },
     "autoload": {
         "psr-4": {
