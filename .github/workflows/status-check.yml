@@ -1,0 +1,12 @@
+on:
+  workflow_run:
+    workflows:
+      - 'PHP Composer'
+    types:
+      - completed
+
+jobs:
+  workflow-status-check:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "$GITHUB_CONTEXT"
